@@ -1,0 +1,4 @@
+1. Finish architecture diagram
+-> Is everything in the correct place?
+-> Do you understand the purpose of each framework? 
+-> What are your servers? What ports are they communicating on?
