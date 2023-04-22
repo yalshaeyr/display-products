@@ -1,5 +1,5 @@
 // assumes the main script is in the parent directory
-const { getAllProducts, DUMMY_LIMIT, DEFAULT_LIMIT } = require('../product-manager.js');
+const { getAllProducts, DUMMY_LIMIT, DEFAULT_LIMIT } = require('../productManager.js');
 
 /** 
  * Returns a defined Promise

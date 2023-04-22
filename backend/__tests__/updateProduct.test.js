@@ -1,7 +1,7 @@
 // assumes the main script is in the parent directory
-const { updateProduct } = require('../product-manager.js');
+const { updateProduct } = require('../productManager.js');
 // assumes the basic test cases are in testUtil directory
-const { testReturnsDefined } = require('../testUtil/basic_tests.js');
+const { testReturnsDefined } = require('../testUtil/basicTests.js');
 
 // Run basic tests
 testReturnsDefined(updateProduct, {})
