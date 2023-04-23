@@ -1,4 +1,4 @@
-const { getAllProducts, updateProduct, deleteProduct } = require('./productManager.js');
+const { getAllProducts, addProduct, updateProduct, deleteProduct } = require('./productManager.js');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -14,6 +14,18 @@ app.get('/api/getAllProducts', async (req, res) => {
     res.json(allProducts.products);
 });
 
+app.post('/api/addProduct', async (req, res) => {
+    const productData = req.body;
+
+    try {
+      const addedProduct = await addProduct(productData);
+      res.status(200).json(addedProduct);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Could not add product' });
+    }
+});
+
 
 // Delete endpoint
 app.delete('/api/deleteProduct/:id', async (req, res) => {
@@ -23,7 +35,7 @@ app.delete('/api/deleteProduct/:id', async (req, res) => {
         res.status(200).json(returnedProduct);
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: 'Could not delete'})
+        res.status(500).json({message: 'Could not delete product'})
     }
 
 });
@@ -38,7 +50,7 @@ app.patch('/api/updateProduct/:id', async (req, res) => {
       res.status(200).json(updatedProduct);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Could not update' });
+      res.status(500).json({ message: 'Could not update product' });
     }
 });
   

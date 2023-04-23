@@ -3,6 +3,23 @@ const BACKEND = 'https://dummyjson.com'
 // The max number of products stored in the backend
 const DUMMY_LIMIT = 100;
 
+/**
+ * Add a product 
+ *
+ * @param {object} productData - The desired attributes for the new product 
+ * @returns {Promise} product - The product as a Promise
+ */
+function addProduct(productData)
+{
+	let product = fetch(`${BACKEND}/products/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+      })
+      .then(res => res.json())
+      
+    return product;
+}
 
 /**
  * Returns a single product 
@@ -22,19 +39,19 @@ function getProduct(id)
  * Update a product 
  *
  * @param {number} id - The id of the product 
- * @param {Product} productData - The desired new attributes for the product 
- * @returns {Promise} result - The result of the update request 
+ * @param {object} productData - The desired new attributes for the product 
+ * @returns {Promise} product - The product resulting from the update request 
  */
 function updateProduct(id, productData)
 {
-	let result = fetch(`${BACKEND}/products/${id}`, {
+	let product = fetch(`${BACKEND}/products/${id}`, {
 	  method: 'PATCH',
 	  headers: { 'Content-Type': 'application/json' },
 	  body: JSON.stringify(productData)
 	})
 	.then(res => res.json())
 	
-	return result;
+	return product;
 }
 
 /**
@@ -89,6 +106,7 @@ function searchList(query)
 
 // Export functions for testing
 module.exports = {
+    addProduct,
     getProduct,
     updateProduct,
     deleteProduct,

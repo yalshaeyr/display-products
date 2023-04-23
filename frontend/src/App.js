@@ -7,6 +7,10 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Stack,
   TextField,
   Typography,
@@ -14,7 +18,7 @@ import {
   Button,
   IconButton,
 } from '@mui/material';
-import { Rating } from '@mui/lab';
+import { Rating } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -25,6 +29,13 @@ function App() {
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedPrice, setEditedPrice] = useState('');
+  const [newProduct, setNewProduct] = useState({
+    title: '',
+    price: '',
+    rating: '',
+    thumbnail: '',
+  });
+  const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
 
   useEffect(() => {
     // Make a GET request to the '/api/products' endpoint
@@ -46,10 +57,58 @@ function App() {
     });
   };
 
-  // Placeholder functions for handling button clicks
   const handleAddProduct = () => {
-    console.log('Add product button clicked');
+    setIsAddProductDialogOpen(true);
   };
+
+  const validateNewProduct = () => {
+    const validatedProduct = {
+        title: newProduct.title !== '' ? newProduct.title : 'Default Title',
+        price: newProduct.price !== '' ? newProduct.price : 0,
+        rating: newProduct.rating !== '' ? newProduct.rating : 0,
+        thumbnail: newProduct.thumbnail !== '' ? newProduct.thumbnail : 'https://i0.wp.com/bane-tech.com/wp-content/uploads/2015/10/A.png?ssl=1',
+    };
+    
+    return validatedProduct;
+  };
+
+  const handleAddProductConfirm = () => {    
+    const validatedProduct = validateNewProduct();
+
+    fetch('/api/addProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(validatedProduct),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((newProduct) => {
+          setProducts((prevState) => [...prevState, newProduct]);
+        })
+        .catch((error) => {
+          console.error('Error updating product:', error);
+        });
+
+
+    handleAddProductCancel();
+  };
+  
+  const handleAddProductCancel = () => {
+    setIsAddProductDialogOpen(false);
+    setNewProduct({
+        title: '',
+        price: '',
+        rating: '',
+        thumbnail: '',
+      });
+  };
+  
 
   const handleEditProduct = async (productId, productData) => {
     fetch(`/api/updateProduct/${productId}`, {
@@ -193,6 +252,55 @@ function App() {
           ))}
         </Grid>
       </Box>
+      <Dialog
+        open={isAddProductDialogOpen}
+        onClose={handleAddProductCancel}
+        aria-labelledby="add-product-dialog-title">
+      <DialogTitle id="add-product-dialog-title">Add Product</DialogTitle>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="title"
+          label="Title"
+          fullWidth
+          variant="standard"
+          onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+        />
+        <TextField
+          margin="dense"
+          id="price"
+          label="Price"
+          fullWidth
+          variant="standard"
+          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+        />
+        <TextField
+          margin="dense"
+          id="rating"
+          label="Rating"
+          fullWidth
+          variant="standard"
+          onChange={(e) => setNewProduct({ ...newProduct, rating: e.target.value })}
+        />
+        <TextField
+          margin="dense"
+          id="thumbnail"
+          label="Thumbnail URL"
+          fullWidth
+          variant="standard"
+          onChange={(e) => setNewProduct({ ...newProduct, thumbnail: e.target.value })}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleAddProductCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleAddProductConfirm} color="primary">
+          Confirm
+        </Button>
+      </DialogActions>
+      </Dialog>
     </Container>
   );
 }
@@ -201,5 +309,4 @@ function App() {
   
 
   
-
 export default App;
