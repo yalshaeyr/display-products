@@ -1,18 +1,47 @@
-// server.js
+const { getAllProducts, updateProduct, deleteProduct } = require('./productManager.js');
+
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3001;
 
-// Define the '/api/products' endpoint that returns a JSON response
-app.get('/api/products', (req, res) => {
-  const products = [
-    { id: 1, name: 'Product 1' },
-    { id: 2, name: 'Product 2' },
-    { id: 3, name: 'Product 3' },
-  ];
+app.use(bodyParser.json());
 
-  res.json(products);
+// Define the '/api/getAllProducts' endpoint that returns a JSON response
+app.get('/api/getAllProducts', async (req, res) => {
+    const allProducts = await getAllProducts();
+
+    res.json(allProducts.products);
 });
+
+
+// Delete endpoint
+app.delete('/api/deleteProduct/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    try {
+        const returnedProduct = await deleteProduct(id);
+        res.status(200).json(returnedProduct);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Could not delete'})
+    }
+
+});
+
+// Update endpoint 
+app.patch('/api/updateProduct/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const productData = req.body;
+  
+    try {
+      const updatedProduct = await updateProduct(id, productData);
+      res.status(200).json(updatedProduct);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Could not update' });
+    }
+});
+  
 
 // Start the server
 app.listen(PORT, () => {

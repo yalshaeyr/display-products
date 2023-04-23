@@ -1,4 +1,6 @@
 # dependencies
-/misc
 /node_modules 
 frontend/node_modules
+
+# development
+/misc
