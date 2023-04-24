@@ -7,10 +7,13 @@ const {
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const PORT = 3001;
 
 app.use(bodyParser.json());
+// Enable CORS for all routes
+app.use(cors());
 
 // Define the '/api/getAllProducts' endpoint that returns a JSON response
 app.get('/api/getAllProducts', async (req, res) => {

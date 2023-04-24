@@ -33,6 +33,7 @@ import './App.css';
  * @return {HTML} The HTML for the Products webpage.
  */
 function App() {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const [products, setProducts] = useState([]);
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
@@ -49,7 +50,7 @@ function App() {
     // don't reload or else you will get all the products
     event.preventDefault();
     query = encodeURIComponent(query);
-    fetch(`/api/searchProducts?query=${query}`)
+    fetch(`${BACKEND_URL}/api/searchProducts?query=${query}`)
         .then((res) => res.json())
         .then((data) => {
         // Set the products state with the response data
@@ -63,7 +64,7 @@ function App() {
 
   useEffect(() => {
     // Make a GET request to the '/api/products' endpoint
-    fetch('/api/getAllProducts')
+    fetch(`${BACKEND_URL}/api/getAllProducts`)
         .then((res) => res.json())
         .then((data) => {
         // Set the products state with the response data
@@ -100,7 +101,7 @@ function App() {
   const handleAddProductConfirm = () => {
     const validatedProduct = validateNewProduct();
 
-    fetch('/api/addProduct', {
+    fetch(`${BACKEND_URL}/api/addProduct`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ function App() {
 
 
   const handleEditProduct = async (productId, productData) => {
-    fetch(`/api/updateProduct/${productId}`, {
+    fetch(`${BACKEND_URL}/api/updateProduct/${productId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ function App() {
   };
 
   const handleDeleteProduct = (productId) => {
-    fetch(`/api/deleteProduct/${productId}`, {
+    fetch(`${BACKEND_URL}/api/deleteProduct/${productId}`, {
       method: 'DELETE',
     })
         .then((response) => {
