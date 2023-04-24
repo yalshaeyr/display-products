@@ -96,12 +96,15 @@ function getAllProducts(limit = 30)
 /**
  * Searches the list of displayed products 
  * 
- * @param {} query - The query to search with 
+ * @param {string} query - The query to search with 
  * @returns {Promise} products - The products which match the query as a Promise in JSON format 
  */
-function searchList(query)
+function searchProducts(query)
 {
-	// to-do
+	products = fetch(`${BACKEND}/products/search?q=${query}`)
+    .then(res => res.json())
+
+    return products; 
 }
 
 // Export functions for testing
@@ -111,5 +114,6 @@ module.exports = {
     updateProduct,
     deleteProduct,
     getAllProducts,
+    searchProducts,
     DUMMY_LIMIT,
 };

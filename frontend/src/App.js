@@ -17,11 +17,14 @@ import {
   Box,
   Button,
   IconButton,
+  InputBase, 
+  Paper,
+  Rating
 } from '@mui/material';
-import { Rating } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 import './App.css';
 
 function App() {
@@ -36,6 +39,22 @@ function App() {
     thumbnail: '',
   });
   const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
+
+const handleSearch = (event, query) => {
+    event.preventDefault(); // don't reload or else you will get all the products
+    query = encodeURIComponent(query);
+    fetch(`/api/searchProducts?query=${query}`)
+    .then((res) => res.json())
+    .then((data) => {
+        // Set the products state with the response data
+        setProducts(data);
+    })
+    .catch((err) => {
+        console.log('Error fetching products:', err);
+    });
+    
+};
+  
 
   useEffect(() => {
     // Make a GET request to the '/api/products' endpoint
@@ -170,6 +189,44 @@ function App() {
 
   return (
     <Container maxWidth="lg">
+        <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          my: 4,
+        }}>
+        <Paper
+        component="form"
+        sx={{
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: '25px',
+            padding: '0 8px',
+            backgroundColor: '#f1f3f4',
+        }}>
+        <InputBase
+            id="search-input"
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+            sx={{ flex: 1, ml: 1 }}
+            onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                handleSearch(event, event.target.value);
+                }
+            }}
+        />
+        <IconButton type="submit" sx={{ p: '10px' }} aria-label="search" 
+        onClick= {(event) => {
+            const input = document.getElementById('search-input'); 
+            handleSearch(event, input.value);
+            }}>
+            <SearchIcon />
+        </IconButton>
+        </Paper>
+      </Box>
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Products

@@ -1,4 +1,9 @@
-const { getAllProducts, addProduct, updateProduct, deleteProduct } = require('./productManager.js');
+const { 
+    getAllProducts, 
+    addProduct, 
+    updateProduct, 
+    deleteProduct,
+    searchProducts } = require('./productManager.js');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,9 +14,25 @@ app.use(bodyParser.json());
 
 // Define the '/api/getAllProducts' endpoint that returns a JSON response
 app.get('/api/getAllProducts', async (req, res) => {
-    const allProducts = await getAllProducts();
+    try{
+        const allProducts = await getAllProducts();
+        res.status(200).json(allProducts.products);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Could not retrieve products' });
+    }
+});
 
-    res.json(allProducts.products);
+app.get('/api/searchProducts', async (req, res) => {
+    const query = req.query.query;
+    
+    try {
+        const productsFound = await searchProducts(query);
+        res.status(200).json(productsFound.products);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Could not search for product' });
+      }
 });
 
 app.post('/api/addProduct', async (req, res) => {
