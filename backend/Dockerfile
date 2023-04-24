@@ -1,20 +1,20 @@
-# Use an official Node.js runtime as the base image
+# Node.js runtime as base image
 FROM node:latest
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /backend
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json for npm install/npm start
 COPY package*.json ./
 
-# Install any necessary dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the backend code to the working directory
+# Copy source code into working directory
 COPY . .
 
-# Expose the port your backend is running on
+# Expose application port 3001
 EXPOSE 3001
 
-# Start the Node.js backend
+# Start the backend
 CMD ["npm", "start"]

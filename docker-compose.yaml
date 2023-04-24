@@ -1,11 +1,15 @@
 version: '3'
 
+# define the backend and frontend
+# docker will create a network by default
 services:
   backend:
     build: ./backend
+    #map app port to container port
     ports:
       - '3001:3001'
   frontend:
     build: ./frontend
+    #map app port to container port
     ports:
       - '3000:3000'

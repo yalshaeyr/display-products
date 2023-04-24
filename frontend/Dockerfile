@@ -1,20 +1,20 @@
-# Use an official Node.js runtime as the base image
+# Node.js runtime as base image
 FROM node:latest
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /frontend
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json for npm install/npm start
 COPY package*.json ./
 
 # Install any necessary dependencies
 RUN npm install
 
-# Copy the rest of the frontend code to the working directory
+# Copy source code into working directory
 COPY . .
 
-# Expose the port the frontend is running on
+# Expose application port 3000
 EXPOSE 3000
 
-# Start the Node.js backend
+# Start the frontend
 CMD ["npm", "start"]

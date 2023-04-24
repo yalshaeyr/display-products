@@ -1,5 +1,8 @@
 // App.js
+
+// import use states
 import React, {useEffect, useState} from 'react';
+// UI elements
 import {
   Container,
   Grid,
@@ -21,10 +24,12 @@ import {
   Paper,
   Rating,
 } from '@mui/material';
+// Icons
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+// css
 import './App.css';
 
 /**
@@ -33,19 +38,40 @@ import './App.css';
  * @return {HTML} The HTML for the Products webpage.
  */
 function App() {
+  // the backend host name
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  /* useStates for various important data structures */
+  // the list of products being displayed
   const [products, setProducts] = useState([]);
+  // the product currently being edited
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedPrice, setEditedPrice] = useState('');
+  // the new product data
   const [newProduct, setNewProduct] = useState({
     title: '',
     price: '',
     rating: '',
     thumbnail: '',
   });
+  // a marker for whether the add product form is open
   const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
 
+  // Load all the products upon startup/refresh
+  useEffect(() => {
+    // Make a GET request to the '/api/products' endpoint
+    fetch(`${BACKEND_URL}/api/getAllProducts`)
+        .then((res) => res.json())
+        .then((data) => {
+        // Set the products state with the response data
+          setProducts(data);
+        })
+        .catch((err) => {
+          console.log('Error fetching products:', err);
+        });
+  }, []);
+
+  // Handles the search event
   const handleSearch = (event, query) => {
     // don't reload or else you will get all the products
     event.preventDefault();
@@ -61,20 +87,6 @@ function App() {
         });
   };
 
-
-  useEffect(() => {
-    // Make a GET request to the '/api/products' endpoint
-    fetch(`${BACKEND_URL}/api/getAllProducts`)
-        .then((res) => res.json())
-        .then((data) => {
-        // Set the products state with the response data
-          setProducts(data);
-        })
-        .catch((err) => {
-          console.log('Error fetching products:', err);
-        });
-  }, []);
-
   // Update a specified product
   const updateProduct = (updatedProduct) => {
     setProducts((prevState) => {
@@ -83,10 +95,12 @@ function App() {
     });
   };
 
+  // Respond to the add product button
   const handleAddProduct = () => {
     setIsAddProductDialogOpen(true);
   };
 
+  // Ensure the new product is valid
   const validateNewProduct = () => {
     const validatedProduct = {
       title: newProduct.title !== '' ? newProduct.title : 'Default Title',
@@ -98,9 +112,12 @@ function App() {
     return validatedProduct;
   };
 
+  // Responds to actually adding a new product
   const handleAddProductConfirm = () => {
+    // validate the new product set by the useState
     const validatedProduct = validateNewProduct();
 
+    // Add the product
     fetch(`${BACKEND_URL}/api/addProduct`, {
       method: 'POST',
       headers: {
@@ -113,7 +130,7 @@ function App() {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           return response.json();
-        })
+        }) // set the new product if the response is successful
         .then((newProduct) => {
           setProducts((prevState) => [...prevState, newProduct]);
         })
@@ -121,10 +138,11 @@ function App() {
           console.error('Error updating product:', error);
         });
 
-
+    // reset the newProduct data
     handleAddProductCancel();
   };
 
+  // Resets the newProduct data and closes the form
   const handleAddProductCancel = () => {
     setIsAddProductDialogOpen(false);
     setNewProduct({
@@ -135,8 +153,9 @@ function App() {
     });
   };
 
-
+  // Communicates with the backend to confirm an edit
   const handleEditProduct = async (productId, productData) => {
+    // Send a HTTP PATCH to update the product
     fetch(`${BACKEND_URL}/api/updateProduct/${productId}`, {
       method: 'PATCH',
       headers: {
@@ -151,7 +170,7 @@ function App() {
           return response.json();
         })
         .then((updatedProduct) => {
-          // Update the product
+          // Update the product if successful
           updateProduct(updatedProduct);
         })
         .catch((error) => {
@@ -159,14 +178,16 @@ function App() {
         });
   };
 
+  // Responds to selecting the delete icon
   const handleDeleteProduct = (productId) => {
+    // Send a HTTP DELETE to delete the product
     fetch(`${BACKEND_URL}/api/deleteProduct/${productId}`, {
       method: 'DELETE',
     })
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
-          }
+          } // remove the id that was deleted
           const updatedProducts = products.filter((product) =>
             product.id !== productId);
           setProducts(updatedProducts);
@@ -176,19 +197,24 @@ function App() {
         });
   };
 
+  // Responds to selecting the edit icon
   const startEditingProduct = (productId, title, price) => {
+    // set the variables
     setEditingProductId(productId);
     setEditedTitle(title);
     setEditedPrice(price);
   };
 
+  // Responds to confirming the edit
   const confirmEditProduct = () => {
     handleEditProduct(editingProductId,
         {title: editedTitle, price: editedPrice});
     setEditingProductId(null);
   };
 
+  // Responds to cancelling an edit
   const cancelEditProduct = () => {
+    // Reset the variables
     setEditingProductId(null);
     setEditedTitle('');
     setEditedPrice('');

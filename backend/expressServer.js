@@ -1,3 +1,4 @@
+// Import functions
 const {
   getAllProducts,
   addProduct,
@@ -5,17 +6,18 @@ const {
   deleteProduct,
   searchProducts} = require('./productManager.js');
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const app = express();
-const PORT = 3001;
+const express = require('express'); // import server
+const bodyParser = require('body-parser'); // parser
+const cors = require('cors'); // prevent communication blocks
+const app = express(); // initialise the server
+const PORT = 3001; // the port to expose the backend on
 
+// Use the body parser to read the body of HTTP requests
 app.use(bodyParser.json());
 // Enable CORS for all routes
 app.use(cors());
 
-// Define the '/api/getAllProducts' endpoint that returns a JSON response
+// Returns all the products
 app.get('/api/getAllProducts', async (req, res) => {
   try {
     const allProducts = await getAllProducts();
@@ -25,6 +27,7 @@ app.get('/api/getAllProducts', async (req, res) => {
   }
 });
 
+// Returns the results of a search
 app.get('/api/searchProducts', async (req, res) => {
   const query = req.query.query;
 
@@ -37,6 +40,7 @@ app.get('/api/searchProducts', async (req, res) => {
   }
 });
 
+// Adds a product and returns the result
 app.post('/api/addProduct', async (req, res) => {
   const productData = req.body;
 
@@ -50,7 +54,7 @@ app.post('/api/addProduct', async (req, res) => {
 });
 
 
-// Delete endpoint
+// Deletes a product and returns the result
 app.delete('/api/deleteProduct/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -62,7 +66,7 @@ app.delete('/api/deleteProduct/:id', async (req, res) => {
   }
 });
 
-// Update endpoint
+// Updates a product and returns the result
 app.patch('/api/updateProduct/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const productData = req.body;
@@ -79,5 +83,5 @@ app.patch('/api/updateProduct/:id', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`API backend started on port ${PORT}`);
 });
