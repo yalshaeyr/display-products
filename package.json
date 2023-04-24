@@ -6,7 +6,13 @@
     "test": "jest",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node backend/expressServer.js",
-    "client": "npm start --prefix frontend"
+    "client": "npm start --prefix frontend",
+    "lint:frontend": "eslint frontend --ext .js",
+    "lint:backend": "eslint backend --ext .js",
+    "lint:frontend:fix": "eslint --fix frontend --ext .js",
+    "lint:backend:fix": "eslint --fix backend --ext .js",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:fix": "npm run lint:frontend:fix && npm run lint:backend:fix"
   },
   "main": "expressServer.js",
   "repository": {
@@ -26,7 +32,10 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "jest": "^29.5.0"
+    "eslint": "^8.39.0",
+    "eslint-config-google": "^0.14.0",
+    "jest": "^29.5.0",
+    "prettier": "2.8.8"
   },
   "peerDependencies": {
     "node": "^18.0.0",
