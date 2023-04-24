@@ -1,15 +1,24 @@
 version: '3'
 
 # define the backend and frontend
-# docker will create a network by default
 services:
   backend:
     build: ./backend
-    #map app port to container port
+    # map app port to container port
     ports:
       - '3001:3001'
+    networks:
+      - display-products-network
   frontend:
     build: ./frontend
-    #map app port to container port
+    # map app port to container port
     ports:
       - '3000:3000'
+    networks:
+      - display-products-network
+    depends_on:
+      - backend
+# connect the containers
+networks:
+  display-products-network:
+    driver: bridge

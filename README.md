@@ -31,3 +31,5 @@ docker compose up
 1. Use Selenium to test frontend 
 2. Modularise frontend App.js
 3. Make backend tests more robust
+4. Replace deprecated/vulnerable packages
+5. Add static dependencies
