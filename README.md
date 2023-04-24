@@ -16,14 +16,16 @@ First, download and navigate to the root directory *display-products*
 To run both the *client* and *server*: 
 
 ```sh
-$ npm install #installs dependencies, only run the first time
-$ npm start
+npm install
+npm start
 ```
+
+**Note**: Only run ```npm install``` the first time. On subsequent times, run ```npm start```
 
 #### Running with Docker
 To run with Docker, install [docker](https://docs.docker.com/get-docker/) and run:
 ```sh
-$ docker compose up
+docker compose up
 ```
 ## TODO
 1. Use Selenium to test frontend 
