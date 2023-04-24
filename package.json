@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Fetches products using a Node.js backend and the Express.js API framework, and displays them using a React frontend",
   "scripts": {
-    "test": "jest",
+    "test": "jest backend",
+    "test:backend": "jest backend",
+    "test:backend:log": "jest backend --json > backend/logs/latestTestLog.json",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node backend/expressServer.js",
     "client": "npm start --prefix frontend",

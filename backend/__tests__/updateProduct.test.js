@@ -17,27 +17,27 @@ test('updateProduct updates the correct product and attributes', async () => {
   const updatedProducts = [
     {
       id: 1,
-      product: {
-        title: 'Updated product',
-        price: 100.50,
-        description: 'An updated product',
-        category: 'Misc',
-      },
+      title: 'Updated product',
+      price: 100.50,
+      description: 'An updated product',
+      category: 'Misc',
     },
   ];
 
   // +1 accounts for ensuring that the response is defined
-  expect.assertions(updatedProducts.length *
-    (Object.keys(updatedProducts[0].product).length + 1));
+  expect.assertions((updatedProducts.length *
+    Object.keys(updatedProducts[0]).length) + 1);
 
   // Check that attributes match
   for (const updatedProduct of updatedProducts) {
-    const result = await updateProduct(updatedProduct.id,
-        updatedProduct.product);
+    const {id, ...updatedProductBody} = updatedProduct;
+    const result = await updateProduct(id,
+        updatedProductBody);
     expect(result).toBeDefined();
-    for (const attribute in updatedProduct.product) {
-      if (updatedProduct.product(hasOwnProperty(attribute))) {
-        expect(result[attribute]).toEqual(updatedProduct.product[attribute]);
+
+    for (const attribute in updatedProduct) {
+      if (updatedProduct.hasOwnProperty(attribute)) {
+        expect(result[attribute]).toEqual(updatedProduct[attribute]);
       }
     }
   }

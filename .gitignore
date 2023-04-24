@@ -4,6 +4,7 @@ frontend/node_modules
 
 # development
 /misc
+/backend/logs/latestTestLog.json
 
 # clean up
 .prettierrc

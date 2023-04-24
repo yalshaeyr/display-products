@@ -2,17 +2,23 @@
  * Tests if the function always returns a defined value.
  *
  * @param {Function} func - The function to test.
+ * @param {boolean} hasId - If the function passes an id
  * @param {...args} args - The arguments to pass to the function.
  * @return {void}
  */
-function testReturnsDefined(func, ...args) {
+function testReturnsDefined(func, hasId = true, ...args) {
   const msg = 'returns a Promise that resolves to a defined value';
   test(`${func.name} ${msg}`, async () => {
     const ids = [-1, 1, 50, 100, 1000];
-    expect.assertions(ids.length);
+    expect.assertions(hasId ? ids.length : 1);
 
-    for (const id of ids) {
-      const result = await func(id, ...args);
+    if (hasId) {
+      for (const id of ids) {
+        const result = await func(id, ...args);
+        expect(result).toBeDefined();
+      }
+    } else {
+      const result = await func(...args);
       expect(result).toBeDefined();
     }
   });
