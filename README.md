@@ -32,4 +32,5 @@ docker compose up
 2. Modularise frontend App.js
 3. Make backend tests more robust
 4. Replace deprecated/vulnerable packages
-5. Add static dependencies
+5. Use nginx as a proxy in the frontend container 
+6. Add static dependencies

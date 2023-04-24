@@ -39,7 +39,7 @@ import './App.css';
  */
 function App() {
   // the backend host name
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
   /* useStates for various important data structures */
   // the list of products being displayed
   const [products, setProducts] = useState([]);

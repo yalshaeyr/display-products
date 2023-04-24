@@ -14,6 +14,8 @@ services:
     # map app port to container port
     ports:
       - '3000:3000'
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:3001
     networks:
       - display-products-network
     depends_on:
