@@ -68,7 +68,7 @@ function App() {
         })
         .catch((err) => {
           console.log('Error fetching products:', err);
-        });
+        }); // eslint-disable-next-line
   }, []);
 
   // Handles the search event

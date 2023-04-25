@@ -27,6 +27,10 @@ To run with Docker, install [docker](https://docs.docker.com/get-docker/) and ru
 ```sh
 docker compose up
 ```
+
+#### The webpage
+Navigate to http://localhost:3000 to view the webpage
+
 ## TODO
 1. Use Selenium to test frontend 
 2. Modularise frontend App.js
